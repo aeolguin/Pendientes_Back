@@ -7,9 +7,11 @@ function errores (data, res) {
     }
 }
 
-//Lista todas las competencias creadas
-function listaCompetencias(req, res) {
-var sql = "select * from competencias";
+//Lista todos los clientes
+function listaClientes(req, res) {
+var sql = "SELECT razon_social, tipo, nombre_sucursal, direccion, nombre, telefono, contacto, provincia FROM pendientes.clientes " +
+          "LEFT JOIN (pendientes.estado, pendientes.sucursal, pendientes.localidad, pendientes.provincia) " + 
+          "ON (clientes.estado_id=estado.id AND sucursal.cliente_id=clientes.id AND sucursal.localidad_id=localidad.id AND sucursal.provincia_id=provincia.id)";
 var response = {
     'data': "",
 }
@@ -84,7 +86,7 @@ con.query("SELECT voto,competencia,poster,titulo,pelicula.id, count(*) as votos 
 
 //Se exportan los modulos para su utilizacion
 module.exports = {
-    listaCompetencias : listaCompetencias,
+    listaClientes : listaClientes,
     obtenerCompetencias : obtenerCompetencias,
     votar : votar,
     resultados: resultados,

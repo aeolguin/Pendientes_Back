@@ -25,7 +25,7 @@ app.use((req, res, next) =>{
 
 //Pedido de parte del modulo Cliente 
 app.use(bodyParser.json());
-app.get('/competencias', controladorCliente.listaCompetencias);
+app.get('/clientes', controladorCliente.listaClientes);
 app.get('/competencias/:id/peliculas' , controladorCliente.obtenerCompetencias);
 app.post('/competencias/:id/voto', controladorCliente.votar);
 app.get('/competencias/:id/resultados', controladorCliente.resultados);

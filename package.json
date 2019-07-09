@@ -1,0 +1,25 @@
+{
+  "name": "pendientes",
+  "version": "1.0.0",
+  "description": "Proyecto de Base de pendientes de pedidos tecnicos",
+  "main": "servidor.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/aeolguin/Pendientes_Back.git"
+  },
+  "author": "Ariel Olguin",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/aeolguin/Pendientes_Back/issues"
+  },
+  "homepage": "https://github.com/aeolguin/Pendientes_Back#readme",
+  "dependencies": {
+    "body-parser": "^1.19.0",
+    "cors": "^2.8.5",
+    "dotenv": "^8.0.0",
+    "mysql": "^2.17.1"
+  }
+}
