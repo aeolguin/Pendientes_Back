@@ -22,74 +22,56 @@ con.query(sql, function(error, resultado,fields){
 });
 };
 
-//Genera en forma aleatoria el listado de Peliculas que se van a mostrar para votar
-function obtenerCompetencias (req , res) {
-var id = req.params.id;
-var sql = "select pelicula.id,pelicula.titulo,pelicula.genero_id,pelicula.poster from competencias.pelicula join (competencias.actor_pelicula,competencias.actor,competencias.director_pelicula,competencias.director,competencias.genero) on (actor_pelicula.pelicula_id = pelicula.id and actor_id = actor.id and director_pelicula.pelicula_id = pelicula.id and director_id = director.id and genero.id = pelicula.genero_id) where 1 = 1" 
-var response = {
-    'peliculas': "",
-    'competencia': "",
-}
-
-con.query("select * from competencias.competencias where id = "+ id, function (error, resultado, fields){
-    errores(error, res);
-    var competencia = resultado[0]
-
-    response.competencia = competencia.nombre;
-    if (competencia.genero_id  != 0) {
-        sql = sql + " and genero_id = " + competencia.genero_id;
+//Lista todas las sucursales
+function listaSucursales(req, res) {
+    var sql = "SELECT razon_social,nombre_sucursal,direccion,provincia,nombre,telefono,contacto FROM pendientes.sucursal " +
+                "LEFT JOIN	(pendientes.localidad, pendientes.clientes, pendientes.provincia)" +
+                "ON (localidad_id=pendientes.localidad.id AND cliente_id=pendientes.clientes.id AND provincia_id=pendientes.provincia.id)";
+    var response = {
+        'data': "",
     }
-
-    if (competencia.actor_id != 0) {
-        sql = sql + " and actor_id = " + competencia.actor_id;
-    }
-
-    if (competencia.director_id != 0){
-        sql = sql + " and director_id = " + competencia.director_id;
-    }
-
-    sql = sql + " order by rand()"
-        con.query(sql, function (error, resultado, fields) {
-            errores(error, res);
-            response.peliculas = resultado;
-            res.send(JSON.stringify(response));
-        });
-    });
-};
-
-//Toma los datos de las Peliculas mostradas e inserta en la base la votacion seleccionada
-function votar (req, res) {
-var idvoto = req.body.idPelicula;
-var competencia = req.params.id;
-
-con.query("insert into peli_votada (competencia, voto) values (?, ?)",
-    [competencia , idvoto], function (error, resultado, fields){
+    con.query(sql, function(error, resultado,fields){
         errores(error, res);
-        res.send(JSON.stringify(resultado));
-    })
-};
-
-
-// Obtiene un listado con las 3 peliculas mas votadas
-function resultados (req, res) {
-var competencia = req.params.id;
-
-con.query("SELECT voto,competencia,poster,titulo,pelicula.id, count(*) as votos FROM competencias.peli_votada join competencias.pelicula on voto = pelicula.id GROUP BY voto,competencia HAVING count(*) > 0 and competencia = ? order by votos desc limit 3", [competencia],
-    function (error, resultado, fields){
-        errores(error , res);
-        var response = {
-            'resultados': resultado,
-        }
+        response = resultado;
         res.send(JSON.stringify(response));
-    })
-};
+    });
+    };
+
+//Lista todo el equipamiento de un cliente
+function listaEquipamiento(req, res) {
+    var cliente = req.params.id;
+    var sqlEquipamiento = "SELECT nombre,modelo,denominacion,descripcion FROM pendientes.equipamiento " +
+              "LEFT JOIN (pendientes.marcas, pendientes.clientes, pendientes.sucursal) " +
+              "ON (marca_id=pendientes.marcas.id AND cliente_id=pendientes.clientes.id AND sucursal_id=pendientes.sucursal.id) WHERE razon_social='" + cliente + "'";
+    
+    var sqlCliente = "SELECT razon_social,nombre_sucursal FROM pendientes.sucursal " +
+                     "LEFT JOIN	(pendientes.clientes)" +
+                     "ON (cliente_id=pendientes.clientes.id) WHERE razon_social='" + cliente + "'";
+    var response = {
+        'data': "",
+        'razonSocial' : "",
+        'sucursal': ""
+    }
+    
+    con.query(sqlCliente, function(error, resultado,fields){
+        errores(error, res);
+        response.razonSocial = resultado[0].razon_social;
+        response.sucursal = resultado[0].nombre_sucursal;
+    });
+
+    con.query(sqlEquipamiento, function(error, resultado,fields){
+        errores(error, res);
+        response.data = resultado;
+        res.send(JSON.stringify(response));
+    });
+    };
+
 
 //Se exportan los modulos para su utilizacion
 module.exports = {
     listaClientes : listaClientes,
-    obtenerCompetencias : obtenerCompetencias,
-    votar : votar,
-    resultados: resultados,
+    listaSucursales : listaSucursales,
+    listaEquipamiento : listaEquipamiento
 };
 
 

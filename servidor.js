@@ -26,19 +26,20 @@ app.use((req, res, next) =>{
 //Pedido de parte del modulo Cliente 
 app.use(bodyParser.json());
 app.get('/clientes', controladorCliente.listaClientes);
-app.get('/competencias/:id/peliculas' , controladorCliente.obtenerCompetencias);
-app.post('/competencias/:id/voto', controladorCliente.votar);
-app.get('/competencias/:id/resultados', controladorCliente.resultados);
+app.get('/sucursal' , controladorCliente.listaSucursales);
+app.get('/equipamiento/:id', controladorCliente.listaEquipamiento);
+//app.get('/tecnicos', controladorCliente.listaTecnicos);
+//app.get('/pendientes', controladorCliente.listaPendientes);
 
 //Pedidos de parte del modulo Administrar
-app.get('/generos', controladorAdministrador.generos);
-app.get('/directores', controladorAdministrador.directores);
-app.get('/actores', controladorAdministrador.actores);
-app.post('/competencias', controladorAdministrador.crearCompetencia);
-app.get('/competencias/:id', controladorAdministrador.competenciaABorrar);
-app.delete('/competencias/:id', controladorAdministrador.eliminaCompetencia);
-app.put('/competencias/:id', controladorAdministrador.editarCompetencia);
-app.delete('/competencias/:id/votos', controladorAdministrador.reiniciarCompetencia);
+// app.get('/generos', controladorAdministrador.generos);
+// app.get('/directores', controladorAdministrador.directores);
+// app.get('/actores', controladorAdministrador.actores);
+// app.post('/competencias', controladorAdministrador.crearCompetencia);
+// app.get('/competencias/:id', controladorAdministrador.competenciaABorrar);
+// app.delete('/competencias/:id', controladorAdministrador.eliminaCompetencia);
+// app.put('/competencias/:id', controladorAdministrador.editarCompetencia);
+// app.delete('/competencias/:id/votos', controladorAdministrador.reiniciarCompetencia);
 
 
 
